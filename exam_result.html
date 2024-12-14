@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhaj School Results</title>
+    <link rel="stylesheet" href="exam_result.css">
+</head>
+
+<body>
+    <header class="header">
+        <!-- This image is hosted on https://imgbb.com/ 13/12/2024 and it will be deleted after 3 months -->
+        <img class="header-logo" src="./school_logo.jpg" alt="School Logo">
+        <div class="header-details">
+            <h1>Minhaj School of Quranic Memorization and Islamic Studies</h1>
+            <h2>Result Portal</h2>
+            <h2>Academy Session 2024/2025</h2>
+        </div>
+    </header>
+    <main class="main">
+        <form id="search_form" class="search_form search_form-field no-print" onsubmit="searchResult(event)">
+            <div class="search_form-inputs">
+                <input class="search_form-input" type="text" id="examNo" placeholder="Enter Exam Number">
+                <button class="search_form-button" type="submit">Search</button>
+            </div>
+        </form>
+        <div class="on-print">
+            <br><br><br>
+        </div>
+        <div id="loadingIndicator" class="loading">Loading...</div>
+        <div class="result" id="result">
+            <section>
+                <header class="result-header">
+                    <h1>Student Result</h1>
+                </header>
+                <div class="result-details">
+                    <div><strong>Name: </strong><span id="studentName">Student name</span></div>
+                    <div><strong>Exam Number: </strong><span id="studentExamNo">Student Registration No</span></div>
+                </div>
+            </section>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>CA1 20</th>
+                        <th>CA2 20</th>
+                        <th>Exam 60</th>
+                        <th>Total</th>
+                        <th>Grade</th>
+                    </tr>
+                </thead>
+                <tbody id="resultTable">
+                    <tr>
+                        <td>Mathematics</td>
+                        <td>15</td>
+                        <td>15</td>
+                        <td>22</td>
+                        <td>52</td>
+                        <td>C</td>
+                    </tr>
+
+                    <tr>
+                        <td>English</td>
+                        <td>10</td>
+                        <td>20</td>
+                        <td>50</td>
+                        <td>80</td>
+                        <td>A</td>
+                    </tr>
+
+                    <tr>
+                        <td>Q/Memorization</td>
+                        <td>10</td>
+                        <td>15</td>
+                        <td>45</td>
+                        <td>70</td>
+                        <td>A</td>
+                    </tr>
+
+                    <tr>
+                        <td>Islamic Studies</td>
+                        <td>10</td>
+                        <td>10</td>
+                        <td>10</td>
+                        <td>30</td>
+                        <td>E</td>
+                    </tr>
+
+                    <tr>
+                        <td>National Value</td>
+                        <td>10</td>
+                        <td>14</td>
+                        <td>44</td>
+                        <td>68</td>
+                        <td>B</td>
+                    </tr>
+
+                    <tr>
+                        <td>Prevocational Studies</td>
+                        <td>12</td>
+                        <td>18</td>
+                        <td>20</td>
+                        <td>50</td>
+                        <td>C</td>
+                    </tr>
+
+                    <tr>
+                        <td>Basic Science and Technology</td>
+                        <td>15</td>
+                        <td>15</td>
+                        <td>35</td>
+                        <td>65</td>
+                        <td>B</td>
+                    </tr>
+
+                    <tr>
+                        <td>Computer Studies</td>
+                        <td>10</td>
+                        <td>12</td>
+                        <td>36</td>
+                        <td>58</td>
+                        <td>C</td>
+                    </tr>
+
+                    <tr>
+                        <td>Yoruba Language</td>
+                        <td>11</td>
+                        <td>15</td>
+                        <td>40</td>
+                        <td>66</td>
+                        <td>B</td>
+                    </tr>
+
+                    <tr>
+                        <td>Cultural and Creative Art </td>
+                        <td>15</td>
+                        <td>10</td>
+                        <td>33</td>
+                        <td>58</td>
+                        <td>C</td>
+                    </tr>
+
+                    <tr>
+                        <td>اللغة العربية </td>
+                        <td>10</td>
+                        <td>15</td>
+                        <td>41</td>
+                        <td>66</td>
+                        <td>B</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button class="result-print_button no-print" onclick="print()">Print Result</button>
+        </div>
+    </main>
+
+    <script>
+        async function searchResult(event) {
+            event.preventDefault();
+
+            // Reference to the form or button
+            const form = event.target; // The form element
+            const button = form.querySelector('button[type="submit"]');
+            const examNoInput = form.examNo;
+            const loadingIndicator = document.getElementById('loadingIndicator');
+
+            const examNo = examNoInput.value.trim();
+            if (examNo === '') {
+                alert("Please enter the student's exam number.");
+            } else {
+                // Disable the form/button and show loading cursor
+                button.disabled = true;
+                document.body.style.cursor = 'progress';
+                loadingIndicator.style.display = 'block';
+                // Call Apps Script function
+                google.script.run
+                    .withSuccessHandler((result) => {
+                        displayResult(result);
+                        button.disabled = false;
+                        document.body.style.cursor = 'default';
+                        loadingIndicator.style.display = 'none';
+                    })
+                    .withFailureHandler((error) => {
+                        alert(`Error fetching result: ${error?.message || 'An unexpected error occurred.'}`);
+                        button.disabled = false;
+                        document.body.style.cursor = 'default';
+                        loadingIndicator.style.display = 'none';
+                    })
+                    .getResult(examNo);
+            }
+        }
+
+        function displayResult(result) {
+            const studentNameElm = document.getElementById('studentName');
+            const studentExamNoElm = document.getElementById('studentExamNo');
+            const resultElm = document.getElementById('result');
+            const resultTableElm = document.getElementById('resultTable');
+
+            if (result) {
+                studentNameElm.textContent = result.name;
+                studentExamNoElm.textContent = result.examNo;
+
+                // Clear previous results
+                resultTableElm.innerHTML = '';
+
+                // Populate table with result
+                result.subjects.forEach(subject => {
+                    const total = subject.ca1 + subject.ca2 + subject.exam;
+                    const grade = getGrade(total);
+
+                    const row = `
+                        <tr>
+                            <td>${subject.subject}</td>
+                            <td>${subject.ca1}</td>
+                            <td>${subject.ca2}</td>
+                            <td>${subject.exam}</td>
+                            <td>${total}</td>
+                            <td>${grade}</td>
+                        </tr>
+                    `;
+                    resultTableElm.innerHTML += row;
+                });
+
+                resultElm.style.display = 'flex';
+            } else {
+                alert('No result found for this Exam number');
+                resultElm.style.display = 'none';
+            }
+        }
+
+        function getGrade(total) {
+            if (total >= 70) return "A";
+            if (total >= 60) return "B";
+            if (total >= 50) return "C";
+            if (total >= 40) return "D";
+            if (total >= 30) return "E";
+            if (total <= 29) return "F";
+            return "-";
+        }
+    </script>
+</body>
+
+</html>

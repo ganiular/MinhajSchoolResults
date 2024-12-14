@@ -1,0 +1,156 @@
+:root {
+    --logo-width: 120px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+h1,
+h2,
+h3 {
+    margin: 0;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    background: beige;
+    gap: 16px;
+    padding: 16px;
+}
+
+.header-logo {
+    width: var(--logo-width);
+}
+
+.header-details {
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+    text-align: center;
+    margin-right: var(--logo-width);
+    font-size: 76%;
+}
+
+.main {
+    display: flex;
+    position: relative;
+    min-height: 80vh;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main::before {
+    content: "";
+    position: absolute;
+    top: 64px;
+    bottom: 64px;
+    left: 64px;
+    right: 64px;
+    z-index: -1;
+    opacity: 0.2;
+    background-image: url("./school_logo.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-blend-mode: hard-light;
+}
+
+.search_form-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 16px;
+}
+
+
+.search_form-inputs {
+    display: flex;
+    height: 38px;
+}
+
+.search_form-input {
+    padding: 0 16px;
+}
+
+.search_form-button {
+    padding: 0 16px;
+}
+
+.loading {
+    color: #000000;
+    font-size: larger;
+    display: none;
+}
+
+.result {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.result-header {
+    padding-bottom: 8px;
+}
+
+.result-details {
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    font-size: 120%;
+}
+
+.result-print_button {
+    padding: 12px 24px;
+    border-radius: 8px;
+    align-self: center;
+}
+
+table {
+    border: 1px solid;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #04157896;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f0f3f9a3;
+}
+
+th,
+td {
+    padding: 12px 16px;
+    border-right: 1px solid #929292;
+}
+
+.on-print {
+    display: none;
+}
+
+@media print {
+    .no-print {
+        display: none;
+    }
+
+    .on-print {
+        display: block;
+    }
+
+    .header {
+        background: none;
+        gap: 16px;
+        padding: 0;
+    }
+
+    .main {
+        align-items: stretch;
+    }
+}
